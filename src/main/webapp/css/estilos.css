@@ -180,8 +180,8 @@ button, input, select { font: inherit; color: inherit; }
 .pie img { height: 28px; width: auto; }
 
 /* ---------- Ventana modal ---------- */
-.modal-fondo { position: fixed; inset: 0; background: rgba(11,17,22,.55); display: grid; place-items: center; padding: var(--e3); z-index: 50; }
-.modal { background: var(--blanco); border-radius: 20px; width: min(440px, 100%); padding: var(--e5); position: relative; }
+.modal-fondo { position: fixed; inset: 0; background: rgba(11,17,22,.55); display: flex; padding: var(--e3); z-index: 50; overflow-y: auto; overscroll-behavior: contain; }
+.modal { background: var(--blanco); border-radius: 20px; width: min(440px, 100%); padding: var(--e5); position: relative; margin: auto; }
 .modal h3 { font-size: 22px; margin-bottom: var(--e2); }
 .modal p { color: var(--gris-texto); margin-bottom: var(--e4); }
 .modal-cerrar { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--gris-fondo); cursor: pointer; font-size: 20px; }
@@ -219,6 +219,8 @@ button, input, select { font: inherit; color: inherit; }
 .usuario-lateral .datos { min-width: 0; flex: 1; }
 .usuario-lateral .nombre { font-weight: 600; font-size: 14px; line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .usuario-lateral .rol { font-size: 12px; color: var(--verde); }
+.insignia { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--pildora); background: var(--verde); color: var(--negro); font-family: var(--titulo); font-weight: 800; font-size: 12px; display: inline-grid; place-items: center; }
+.nav-lateral a.activo .insignia { background: var(--negro); color: var(--verde); }
 .salir { background: none; border: 0; color: #8b949b; cursor: pointer; padding: 6px; border-radius: 8px; }
 .salir:hover { color: var(--blanco); background: #232d35; }
 
@@ -236,7 +238,7 @@ button, input, select { font: inherit; color: inherit; }
 .menu-app-btn { display: none; }
 .prototipo-chip { font-family: var(--titulo); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: var(--verde-pastel); padding: 4px 10px; border-radius: var(--pildora); }
 
-.contenido { padding: var(--e5); max-width: calc(var(--ancho-max) + 64px); width: 100%; }
+.contenido { padding: var(--e5); max-width: 1680px; width: 100%; margin: 0 auto; }
 .titulo-pagina { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--e3); flex-wrap: wrap; margin-bottom: var(--e4); }
 .titulo-pagina h1 { font-size: 32px; line-height: 40px; font-weight: 800; }
 .titulo-pagina p { color: var(--gris-texto); margin-top: 4px; }
@@ -255,7 +257,7 @@ button, input, select { font: inherit; color: inherit; }
 .dato.destacado .nombre { color: #c3c9cd; }
 
 /* Mis cursos */
-.cursos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--e4); }
+.cursos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--e4); }
 .curso { background: var(--blanco); border-radius: var(--radio-tarjeta); box-shadow: var(--sombra); overflow: hidden; display: flex; flex-direction: column; }
 .curso-cabeza { background: var(--negro); color: var(--blanco); padding: var(--e4); position: relative; overflow: hidden; }
 .curso-cabeza::after { content: ""; position: absolute; right: -30px; top: -30px; width: 110px; height: 110px; border-radius: 50%; background: var(--verde); opacity: .95; }
@@ -336,7 +338,9 @@ button, input, select { font: inherit; color: inherit; }
 .ingreso-arte p { color: #c3c9cd; max-width: 400px; margin-top: var(--e3); position: relative; z-index: 1; }
 .ingreso-arte .circulo { position: absolute; border-radius: 50%; border: 28px solid var(--verde); width: 320px; height: 320px; right: -110px; bottom: -110px; }
 .ingreso-arte .cuadro { position: absolute; border-radius: 32px; background: var(--verde-bosque); width: 140px; height: 140px; right: 120px; top: 90px; transform: rotate(20deg); opacity: .8; }
-.ingreso-arte .logo-claro { height: 40px; width: auto; position: relative; z-index: 1; }
+.marca-ingreso { align-self: flex-start; display: flex; align-items: center; gap: 12px; text-decoration: none; position: relative; z-index: 1; }
+.marca-ingreso img { height: 48px; width: auto; }
+.marca-ingreso span { font-family: var(--titulo); font-weight: 800; font-size: 30px; letter-spacing: 1px; color: var(--blanco); }
 .ingreso-form { display: grid; place-items: center; padding: var(--e5) var(--e3); }
 .ingreso-caja { width: min(400px, 100%); }
 .ingreso-caja h1 { font-size: 32px; line-height: 40px; font-weight: 800; }
@@ -428,7 +432,10 @@ button, input, select { font: inherit; color: inherit; }
   .resaltado { padding: 0 12px 2px; }
   .forma-izq, .forma-der { width: 160px; height: 160px; }
   .franja-cta { flex-direction: column; align-items: flex-start; padding: var(--e5) var(--e4); }
+  .modal { padding: var(--e4) var(--e3); }
+  .modal h3 { padding-right: 40px; }
 }
+html:has(body.inicio) { overflow-x: hidden; }
 
 @media (max-width: 599px) {
   .contenedor { padding: 0 var(--e3); }

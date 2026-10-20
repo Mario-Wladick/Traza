@@ -51,6 +51,13 @@ var Modelo = (function () {
     sesion: function () { return pedir("GET", "sesion"); },
     salir: function () { return pedir("POST", "salir", {}); },
 
+    // Solicitudes de cuenta (quién crea las cuentas: la secretaría las aprueba)
+    solicitarCuenta: function (codigo, nombre, rol, clave) { return pedir("POST", "solicitudes", { codigo: codigo, nombre: nombre, rol: rol, clave: clave }); },
+    solicitudesPendientes: function () { return pedir("GET", "solicitudes"); },
+    contarSolicitudes: function () { return pedir("GET", "solicitudes/contar"); },
+    aprobarSolicitud: function (id) { return pedir("POST", "solicitudes/" + id + "/aprobar", {}); },
+    rechazarSolicitud: function (id) { return pedir("POST", "solicitudes/" + id + "/rechazar", {}); },
+
     // Cursos
     cursosPublicos: function () { return pedir("GET", "cursos/publicos"); },
     misCursos: function () { return pedir("GET", "cursos"); },

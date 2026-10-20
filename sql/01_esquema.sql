@@ -11,6 +11,7 @@
 -- =========================================================
 
 DROP VIEW  IF EXISTS v_portafolio_estudiante_curso;
+DROP TABLE IF EXISTS solicitud_cuenta;
 DROP TABLE IF EXISTS evidencia;
 DROP TABLE IF EXISTS asistencia;
 DROP TABLE IF EXISTS matricula;
@@ -103,6 +104,24 @@ CREATE TABLE evidencia (
     CONSTRAINT fk_evidencia_matricula FOREIGN KEY (estudiante_codigo, curso_id)
         REFERENCES matricula (estudiante_codigo, curso_id) ON DELETE CASCADE
 );
+
+-- ---------------------------------------------------------
+-- SOLICITUD DE CUENTA: quien no tiene cuenta la pide desde «Regístrate»;
+-- la secretaría académica la aprueba (se crea el usuario) o la rechaza.
+-- ---------------------------------------------------------
+CREATE TABLE solicitud_cuenta (
+    id             SERIAL       PRIMARY KEY,
+    codigo         VARCHAR(6)   NOT NULL CHECK (codigo ~ '^[0-9]{6}$'),
+    nombre         VARCHAR(120) NOT NULL,
+    rol            VARCHAR(12)  NOT NULL CHECK (rol IN ('estudiante', 'docente')),
+    clave_cifrada  VARCHAR(200) NOT NULL,
+    estado         VARCHAR(10)  NOT NULL DEFAULT 'pendiente'
+                   CHECK (estado IN ('pendiente', 'aprobada', 'rechazada')),
+    creada_en      TIMESTAMP    NOT NULL DEFAULT now(),
+    atendida_en    TIMESTAMP,
+    atendida_por   VARCHAR(6)   REFERENCES usuario (codigo)
+);
+CREATE UNIQUE INDEX uq_solicitud_pendiente ON solicitud_cuenta (codigo) WHERE estado = 'pendiente';
 
 CREATE INDEX ix_curso_docente       ON curso (docente_codigo);
 CREATE INDEX ix_matricula_curso     ON matricula (curso_id);

@@ -31,6 +31,10 @@
     ingreso: { codigo: "", clave: "", error: "" }
   };
 
+  // Cada vez que se dibuja una página del sistema, se actualiza el contador de solicitudes
+  var marcoOriginal = Vista.marco;
+  Vista.marco = function () { marcoOriginal.apply(Vista, arguments); actualizarInsignia(); };
+
   function inicioDe(rol) {
     return { docente: "#/cursos", estudiante: "#/portafolio", secretaria: "#/matriculas/nueva", director: "#/portafolio-cursos" }[rol];
   }
@@ -89,6 +93,7 @@
     if (s[0] === "cursos" && s[2] === "portafolio") return paginaPortafolioCurso(r, s[1]);
     if (s[0] === "cursos" && s[2] === "estudiantes") return paginaListaCurso(r, s[1]);
     if (s[0] === "matriculas" && s[1] === "nueva") return paginaMatricula(r);
+    if (s[0] === "solicitudes") return paginaSolicitudes(r);
     if (s[0] === "portafolio" && s[1] === "evidencias") return paginaSubirEvidencia(r);
     if (s[0] === "portafolio") return paginaMiPortafolio(r);
     ir(inicioDe(usuario.rol));
@@ -250,6 +255,29 @@
     }, 250);
   }
 
+  // ---------- Solicitudes de cuenta (secretaría) ----------
+  async function paginaSolicitudes(r) {
+    if (usuario.rol !== "secretaria") return ir(inicioDe(usuario.rol));
+    var resp = await Modelo.solicitudesPendientes();
+    if (!r.vigente() || problema(r, resp)) return;
+    Vista.marco(usuario, r.ruta, [{ txt: "Solicitudes de cuenta" }], Vista.solicitudes(resp.solicitudes));
+  }
+  async function atenderSolicitud(boton, aprobar) {
+    var nombre = boton.dataset.nombre;
+    if (!aprobar && !confirm("¿Rechazar la solicitud de " + nombre + "? No se creará su cuenta.")) return;
+    boton.disabled = true;
+    var resp = aprobar ? await Modelo.aprobarSolicitud(boton.dataset.id) : await Modelo.rechazarSolicitud(boton.dataset.id);
+    if (!resp.ok) { boton.disabled = false; Vista.avisar(resp.mensaje, "error"); return atender(); }
+    Vista.avisar(aprobar ? "Cuenta creada para " + nombre + ". Ya puede ingresar con su código " + resp.usuario.codigo + "." : "Solicitud de " + nombre + " rechazada.");
+    atender();
+  }
+  /* El número de solicitudes pendientes junto al menú de la secretaría */
+  async function actualizarInsignia() {
+    if (!usuario || usuario.rol !== "secretaria") return;
+    var resp = await Modelo.contarSolicitudes();
+    if (resp.ok) Vista.insignia("insignia-solicitudes", resp.pendientes);
+  }
+
   // ---------- 8 · Lista del curso ----------
   async function paginaListaCurso(r, cursoId) {
     var resp = await Modelo.listaCurso(cursoId);
@@ -350,6 +378,8 @@
     else if (a === "reemplazar") enviarEvidencia(true);
     else if (a === "conservar") { estado.subida = { valores: {}, archivo: null, confirmacion: "", error: "" }; Vista.avisar("Conservamos tu entrega anterior"); location.hash = "#/portafolio"; }
     else if (a === "archivo-prueba") archivoDePrueba(btn.dataset.caso);
+    else if (a === "aprobar-solicitud") atenderSolicitud(btn, true);
+    else if (a === "rechazar-solicitud") atenderSolicitud(btn, false);
   });
 
   document.addEventListener("change", function (ev) {

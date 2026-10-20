@@ -68,6 +68,9 @@ public final class Objetos {
 
     public record Matricula(Usuario estudiante, List<ResultadoMatricula> resultados) { }
 
+    /** Solicitud de cuenta. estado: pendiente | aprobada | rechazada. Nunca lleva la contraseña. */
+    public record Solicitud(int id, String codigo, String nombre, String rol, String estado, String fecha) { }
+
     /** Estados marcados en una sesión: código del estudiante → presente | tardanza | falta. */
     public record EstadosSesion(Map<String, String> estados) { }
 }

@@ -15,6 +15,12 @@ En **pgAdmin** (o `psql`), conectado como `postgres`:
    - `sql/01_esquema.sql`: las tablas, claves y reglas.
    - `sql/02_datos_prueba.sql`: 45 usuarios, 4 cursos, asistencias y evidencias de prueba.
 
+> **Importante:** si ejecutas los scripts como `postgres`, primero ejecuta `SET ROLE traza_app;`
+> en el mismo Query Tool, para que las tablas queden a nombre de `traza_app`.
+
+**¿Ya tenías la base creada con una versión anterior?** Solo ejecuta `sql/03_solicitudes_cuenta.sql`
+en la base **traza**. Agrega las solicitudes de cuenta sin borrar tus datos.
+
 Para volver a los datos iniciales, ejecuta otra vez `01_esquema.sql` y `02_datos_prueba.sql`.
 
 > Si prefieres usar tu usuario `postgres`, cambia `db.usuario` y `db.clave` en
@@ -40,12 +46,18 @@ Para volver a los datos iniciales, ejecuta otra vez `01_esquema.sql` y `02_datos
 
 ---
 
+## Cuentas nuevas
+
+1. Quien no tiene cuenta usa **Regístrate** en la página de inicio: nombre, código, rol y su contraseña.
+2. La **secretaría académica** entra a **Solicitudes de cuenta** (el número verde indica cuántas hay) y **aprueba** o **rechaza**.
+3. Al aprobar, se crea el usuario y la persona ingresa con su código y la contraseña que eligió.
+
 ## Cómo está organizado (MVC)
 
 ```
 traza/
 ├── pom.xml                         Maven: servlet-api 6.0 y driver de PostgreSQL
-├── sql/                            00 crear base · 01 esquema · 02 datos de prueba
+├── sql/                            00 crear base · 01 esquema · 02 datos de prueba · 03 solicitudes
 └── src/main/
     ├── resources/traza.properties  conexión a la base y carpeta de evidencias
     ├── java/pe/edu/unap/traza/
@@ -57,6 +69,7 @@ traza/
     │   │   ├── EvidenciaModelo.java    4 subirEvidencia · 5 calificarEvidencia
     │   │   ├── PortafolioModelo.java   6 armarPortafolio
     │   │   ├── CursoModelo.java        cursos y listarMatriculados
+    │   │   ├── SolicitudModelo.java    solicitudes de cuenta (pedir, aprobar, rechazar)
     │   │   ├── Conexion.java · Clave.java (PBKDF2) · ReglaException.java
     │   └── controlador/            CONTROLADOR: un servlet por grupo de rutas
     │       ├── IngresoServlet.java     /api/ingresar · /api/sesion · /api/salir
@@ -64,6 +77,7 @@ traza/
     │       ├── MatriculaServlet.java   /api/matriculas · /api/usuarios/{codigo}
     │       ├── EvidenciaServlet.java   /api/evidencias/{id}/calificacion · /archivo
     │       ├── PortafolioServlet.java  /api/portafolio · /api/portafolio/evidencias
+    │       ├── SolicitudServlet.java   /api/solicitudes · /{id}/aprobar · /{id}/rechazar
     │       └── BaseServlet.java · Json.java
     └── webapp/                     VISTA: index.html, app.html, css, img, js
 ```
@@ -80,6 +94,7 @@ traza/
 | GET /api/portafolio · /api/cursos/{id}/portafolio | armarPortafolio | RF-05 |
 | GET /api/cursos/{id}/estudiantes | listarMatriculados (hueco de la Práctica 4) | RF-01, RF-02 |
 | GET /api/cursos/{id}/evidencias | listarPorCalificar (hueco de la Práctica 4) | RF-03 |
+| POST /api/solicitudes · /{id}/aprobar | solicitarCuenta · aprobar · rechazar | pregunta abierta: quién crea las cuentas |
 
 ### Reglas del análisis que cuida la base de datos
 
@@ -101,5 +116,4 @@ Se cambia en `traza.properties` → `evidencias.carpeta`. Las evidencias de los 
 - RF-05: operación «Revisar portafolio» (estado *revisado* con la observación del director).
 - RF-07: objeto Competencia y avance por competencias (vuelta 03).
 - RF-08: objeto Alerta y operación Detectar riesgo (vuelta 02).
-- Crear cuentas de docentes y estudiantes desde la app (pregunta abierta: hoy se cargan por SQL).
 - Quitar las «Cuentas de prueba» de la pantalla de ingreso antes de publicar.

@@ -60,20 +60,29 @@
   modal.addEventListener("click", function (e) { if (e.target === modal || e.target.hasAttribute("data-cerrar")) cerrarModal(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarModal(); });
 
-  document.getElementById("form-registro").addEventListener("submit", function (e) {
+  document.getElementById("form-registro").addEventListener("submit", async function (e) {
     e.preventDefault();
+    var form = this;
     var nombre = document.getElementById("reg-nombre").value.trim();
     var codigo = document.getElementById("reg-codigo").value.trim();
+    var rol = document.getElementById("reg-rol").value;
+    var clave = document.getElementById("reg-clave").value;
+    var clave2 = document.getElementById("reg-clave2").value;
     var error = document.getElementById("reg-error");
-    if (!nombre || !/^\d{6}$/.test(codigo)) {
-      error.textContent = !nombre ? "Escribe tu nombre completo." : "El código universitario tiene 6 dígitos.";
-      error.classList.remove("oculto");
-      return;
-    }
+    function mostrar(texto) { error.textContent = texto; error.classList.remove("oculto"); }
+    if (!nombre) return mostrar("Escribe tu nombre completo.");
+    if (!/^\d{6}$/.test(codigo)) return mostrar("El código universitario tiene 6 dígitos.");
+    if (clave.length < 6) return mostrar("La contraseña debe tener al menos 6 caracteres.");
+    if (clave !== clave2) return mostrar("Las contraseñas no coinciden.");
+    var boton = form.querySelector("button[type=submit]");
+    boton.disabled = true;
+    var resp = await Modelo.solicitarCuenta(codigo, nombre, rol, clave);
+    boton.disabled = false;
+    if (!resp.ok) return mostrar(resp.mensaje);
     error.classList.add("oculto");
-    this.reset();
+    form.reset();
     cerrarModal();
-    avisar("Listo, " + nombre.split(" ")[0] + ". Enviamos tu solicitud a la secretaría académica.");
+    avisar("Listo, " + nombre.split(" ")[0] + ". Tu solicitud llegó a la secretaría académica. Cuando la apruebe, ingresa con tu código " + codigo + ".");
   });
 
   // Botones que aún no tienen pantalla

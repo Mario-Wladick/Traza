@@ -176,7 +176,7 @@
     <div class="modal">
       <button class="modal-cerrar" data-cerrar aria-label="Cerrar">×</button>
       <h3 id="titulo-registro">Solicita tu cuenta</h3>
-      <p>Las cuentas las crea la secretaría académica. Déjanos tus datos y te avisamos cuando esté lista.</p>
+      <p>Elige tu contraseña y envía tu solicitud. La secretaría académica la revisa y, cuando la apruebe, ya puedes ingresar con tu código.</p>
       <form class="form" id="form-registro" novalidate>
         <div class="grupo">
           <label for="reg-nombre">Nombre completo</label>
@@ -189,9 +189,17 @@
         <div class="grupo">
           <label for="reg-rol">Soy</label>
           <select class="campo" id="reg-rol">
-            <option>Estudiante</option>
-            <option>Docente</option>
+            <option value="estudiante">Estudiante</option>
+            <option value="docente">Docente</option>
           </select>
+        </div>
+        <div class="grupo">
+          <label for="reg-clave">Contraseña</label>
+          <input class="campo" id="reg-clave" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="grupo">
+          <label for="reg-clave2">Repite la contraseña</label>
+          <input class="campo" id="reg-clave2" type="password" autocomplete="new-password">
         </div>
         <div class="mensaje error oculto" id="reg-error"></div>
         <button class="btn btn-verde btn-bloque" type="submit">Enviar solicitud</button>

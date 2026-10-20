@@ -30,7 +30,9 @@ var Vista = (function () {
     check: '<path d="M5 12l5 5 9-10"/>',
     flecha: '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
     atras: '<path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/>',
-    reiniciar: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>'
+    reiniciar: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
+    solicitud: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+    cruz: '<path d="M6 6l12 12M18 6L6 18"/>'
   };
   function icono(nombre, tam, grosor) {
     tam = tam || 20;
@@ -59,7 +61,8 @@ var Vista = (function () {
   function menuDe(rol) {
     if (rol === "docente") return [{ ruta: "#/cursos", txt: "Mis cursos", ic: "cursos" }];
     if (rol === "estudiante") return [{ ruta: "#/portafolio", txt: "Mi portafolio", ic: "portafolio" }, { ruta: "#/portafolio/evidencias/nueva", txt: "Subir evidencia", ic: "subir" }];
-    if (rol === "secretaria") return [{ ruta: "#/matriculas/nueva", txt: "Matricular estudiante", ic: "matricula" }, { ruta: "#/listas", txt: "Listas de cursos", ic: "lista", grupo: "/estudiantes" }];
+    if (rol === "secretaria") return [{ ruta: "#/matriculas/nueva", txt: "Matricular estudiante", ic: "matricula" }, { ruta: "#/listas", txt: "Listas de cursos", ic: "lista", grupo: "/estudiantes" },
+      { ruta: "#/solicitudes", txt: "Solicitudes de cuenta", ic: "solicitud", insignia: "insignia-solicitudes" }];
     return [{ ruta: "#/portafolio-cursos", txt: "Portafolio de cursos", ic: "portafolio", grupo: "/portafolio" }];
   }
 
@@ -67,7 +70,8 @@ var Vista = (function () {
     var items = menuDe(usuario.rol).map(function (m) {
       var activo = rutaActual === m.ruta || (m.grupo && rutaActual.indexOf(m.grupo) >= 0) ||
         (m.ruta === "#/cursos" && rutaActual.indexOf("#/cursos") === 0);
-      return '<a href="' + m.ruta + '" class="' + (activo ? "activo" : "") + '">' + icono(m.ic) + e(m.txt) + "</a>";
+      return '<a href="' + m.ruta + '" class="' + (activo ? "activo" : "") + '">' + icono(m.ic) + e(m.txt) +
+        (m.insignia ? '<span class="insignia oculto" id="' + m.insignia + '"></span>' : "") + "</a>";
     }).join("");
     var migasHtml = migas.map(function (m, i) {
       return i === migas.length - 1 ? "<b>" + e(m.txt) + "</b>" : '<a href="' + m.ruta + '">' + e(m.txt) + "</a> / ";
@@ -115,7 +119,7 @@ var Vista = (function () {
     raiz().innerHTML =
       '<div class="ingreso">' +
         '<section class="ingreso-arte"><div class="cuadro"></div><div class="circulo"></div>' +
-          '<img class="logo-claro" src="img/isotipo.png" alt="TRAZA">' +
+          '<a class="marca-ingreso" href="index.html"><img src="img/isotipo.png" alt=""><span>TRAZA</span></a>' +
           "<div><h2>Deja la <span>traza</span> de tu recorrido académico</h2><p>Asistencia, evidencias y portafolio en un solo lugar, desde tu celular o tu computadora.</p></div>" +
         "</section>" +
         '<section class="ingreso-form"><div class="ingreso-caja">' +
@@ -142,7 +146,7 @@ var Vista = (function () {
       return '<article class="curso">' +
         '<div class="curso-cabeza"><span class="codigo">' + e(c.codigo) + " · Ciclo " + e(c.ciclo) + "</span><h3>" + e(c.nombre) + "</h3></div>" +
         '<div class="curso-cuerpo">' +
-          '<div class="curso-meta"><span>' + c.matriculados + " estudiantes</span><span>" + c.sesiones + " sesiones</span><span>" + c.porCalificar + " por calificar</span></div>" +
+          '<div class="curso-meta"><span>' + c.matriculados + (c.matriculados === 1 ? " estudiante" : " estudiantes") + "</span><span>" + c.sesiones + (c.sesiones === 1 ? " sesión" : " sesiones") + "</span><span>" + c.porCalificar + " por calificar</span></div>" +
           '<a class="btn btn-verde btn-bloque" href="#/cursos/' + e(c.id) + '/asistencia/' + c.siguiente + '">' + icono("asistencia", 18) + " Registrar asistencia</a>" +
           '<div class="curso-acciones">' +
             '<a class="btn btn-claro btn-chico" href="#/cursos/' + e(c.id) + '/evidencias">Evidencias</a>' +
@@ -403,6 +407,30 @@ var Vista = (function () {
       "</form></div>";
   }
 
+  // ---------- Solicitudes de cuenta (/solicitudes) ----------
+  function solicitudes(lista) {
+    var nombresRolCorto = { estudiante: "Estudiante", docente: "Docente" };
+    var cuerpo = lista.length
+      ? '<ul class="lista">' + lista.map(function (s) {
+          var f = s.fecha.split("T");
+          return '<li class="item"><div class="avatar">' + e(iniciales(s.nombre)) + '</div>' +
+            '<div class="info"><div class="n">' + e(s.nombre) + '</div><div class="c">Código ' + e(s.codigo) + " · " + e(nombresRolCorto[s.rol] || s.rol) +
+            " · pedida el " + fechaLarga(f[0]) + " a las " + e((f[1] || "").slice(0, 5)) + "</div></div>" +
+            '<span class="chip por-calificar">Pendiente</span>' +
+            '<button class="btn btn-claro btn-chico" data-accion="rechazar-solicitud" data-id="' + s.id + '" data-nombre="' + e(s.nombre) + '">' + icono("cruz", 16) + " Rechazar</button>" +
+            '<button class="btn btn-verde btn-chico" data-accion="aprobar-solicitud" data-id="' + s.id + '" data-nombre="' + e(s.nombre) + '">' + icono("check", 16) + " Aprobar</button></li>";
+        }).join("") + "</ul>"
+      : '<div class="vacio"><b>No hay solicitudes pendientes</b>Cuando alguien use «Regístrate» en la página de inicio, su pedido aparecerá aquí.</div>';
+    return tituloPagina("Solicitudes de cuenta", "Al aprobar, se crea la cuenta y la persona ingresa con su código y la contraseña que eligió.") +
+      '<div class="panel">' + cuerpo + "</div>";
+  }
+  function insignia(id, n) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = n;
+    el.classList.toggle("oculto", !n);
+  }
+
   // ---------- Otras ----------
   function sinAcceso(texto, volver) {
     return '<div class="panel vacio"><b>No tienes acceso a esta página</b>' + e(texto) + '<br><br><a class="btn btn-verde" href="' + volver + '">Ir a mi inicio</a></div>';
@@ -422,6 +450,7 @@ var Vista = (function () {
     registroAsistencia: registroAsistencia, actualizarFila: actualizarFila, actualizarContador: actualizarContador, mostrarErrorAsistencia: mostrarErrorAsistencia,
     resumenSesion: resumenSesion, evidenciasCurso: evidenciasCurso, portafolioCurso: portafolioCurso,
     matricula: matricula, listaCurso: listaCurso, miPortafolio: miPortafolio, subirEvidencia: subirEvidencia,
+    solicitudes: solicitudes, insignia: insignia,
     sinAcceso: sinAcceso, avisar: avisar
   };
 })();
