@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAZA · Sistema de Control Educativo</title>
+  <link rel="icon" href="img/isotipo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body class="inicio">
+
+  <!-- ===== Menú superior ===== -->
+  <header class="menu-sup">
+    <div class="contenedor">
+      <nav class="menu-links" aria-label="Principal">
+        <a href="#inicio" class="activo" data-seccion="inicio">Inicio</a>
+        <a href="#cursos" data-seccion="cursos">Cursos</a>
+        <a href="#blog" data-seccion="blog">Blog</a>
+      </nav>
+      <a href="#inicio" class="menu-logo" aria-label="TRAZA, ir al inicio">
+        <img src="img/logo-horizontal.png" alt="TRAZA">
+      </a>
+      <div class="menu-acciones">
+        <a href="app.html#/ingresar" class="enlace">Iniciar sesión</a>
+        <button class="btn btn-verde" data-abrir="modal-registro">Regístrate</button>
+        <button class="hamburguesa" id="btn-hamburguesa" aria-label="Abrir menú" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="menu-movil" id="menu-movil" aria-label="Menú del celular">
+      <a href="#inicio">Inicio</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#blog">Blog</a>
+      <a href="app.html#/ingresar">Iniciar sesión</a>
+      <button class="btn btn-verde btn-bloque" data-abrir="modal-registro">Regístrate</button>
+    </nav>
+  </header>
+
+  <!-- ===== Portada ===== -->
+  <section class="hero" id="inicio">
+    <div class="forma forma-izq"></div>
+    <div class="forma forma-der"></div>
+    <div class="contenedor">
+      <div class="hero-grid">
+        <h1>
+          <svg class="chispa" viewBox="0 0 52 52" aria-hidden="true"><g stroke="#53E006" stroke-width="4" stroke-linecap="round"><path d="M30 6v12"/><path d="M14 12l8 9"/><path d="M4 30l13-2"/></g></svg>
+          Impulsa tu<br>
+          <span class="resaltado">aprendizaje</span><br>
+          en el Aula Virtual
+        </h1>
+        <div>
+          <p class="hero-texto">Accede a tus cursos, clases en vivo y materiales desde cualquier lugar. Tu formación, sin límites.</p>
+          <a href="app.html#/ingresar" class="btn btn-borde">
+            Comienza Ahora
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="hero-ilustracion">
+        <img src="img/ilustracion-aula.jpg" alt="Estudiantes conectados al aula virtual con su docente">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Cómo funciona: un camino por rol ===== -->
+  <section class="seccion seccion-blanca" id="como-funciona">
+    <div class="contenedor">
+      <div class="seccion-titulo">
+        <span class="etiqueta">Cómo funciona</span>
+        <h2>Cada uno ve solo lo que le toca</h2>
+        <p>Entra con tu código universitario y TRAZA te muestra lo de tu rol.</p>
+      </div>
+      <div class="grid-4">
+        <article class="tarjeta-rol">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></div>
+          <h3>Docente</h3>
+          <p>Pasa lista en menos de 3 minutos y califica las evidencias desde tu celular.</p>
+          <a class="btn btn-negro btn-chico" href="app.html#/ingresar?demo=docente">Entrar como docente</a>
+        </article>
+        <article class="tarjeta-rol">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 21h14"/></svg></div>
+          <h3>Estudiante</h3>
+          <p>Sube tus trabajos y mira tu portafolio, tus notas y tu avance al día.</p>
+          <a class="btn btn-negro btn-chico" href="app.html#/ingresar?demo=estudiante">Entrar como estudiante</a>
+        </article>
+        <article class="tarjeta-rol">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6"/><path d="M19 8v6M16 11h6"/></svg></div>
+          <h3>Secretaría</h3>
+          <p>Matricula a cada estudiante en sus cursos sin duplicados ni olvidos.</p>
+          <a class="btn btn-negro btn-chico" href="app.html#/ingresar?demo=secretaria">Entrar como secretaría</a>
+        </article>
+        <article class="tarjeta-rol">
+          <div class="icono"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 15l3-3 3 2 4-5"/></svg></div>
+          <h3>Director</h3>
+          <p>Revisa el portafolio de cada curso armado solo, sin pedir carpetas.</p>
+          <a class="btn btn-negro btn-chico" href="app.html#/ingresar?demo=director">Entrar como director</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Cursos ===== -->
+  <section class="seccion" id="cursos">
+    <div class="contenedor">
+      <div class="seccion-titulo">
+        <span class="etiqueta">Semestre 2026-II</span>
+        <h2>Cursos en TRAZA</h2>
+        <p>Asistencia, evidencias y portafolio de cada curso en un solo lugar.</p>
+      </div>
+      <div class="grid-3" id="lista-cursos-inicio"><!-- se llena con JavaScript --></div>
+    </div>
+  </section>
+
+  <!-- ===== Blog ===== -->
+  <section class="seccion seccion-blanca" id="blog">
+    <div class="contenedor">
+      <div class="seccion-titulo">
+        <span class="etiqueta">Blog</span>
+        <h2>Novedades</h2>
+      </div>
+      <div class="grid-3">
+        <article class="tarjeta-blog">
+          <div class="portada"></div>
+          <div class="cuerpo">
+            <span class="fecha">20 de octubre de 2026</span>
+            <h3>Tu portafolio ahora se arma solo</h3>
+            <p>Cada evidencia que subes y cada asistencia quedan en tu portafolio, sin carpetas.</p>
+            <button class="btn btn-texto btn-chico" data-aviso="El artículo completo estará en la siguiente versión.">Leer más →</button>
+          </div>
+        </article>
+        <article class="tarjeta-blog">
+          <div class="portada v2"></div>
+          <div class="cuerpo">
+            <span class="fecha">14 de octubre de 2026</span>
+            <h3>Pasa lista en menos de 3 minutos</h3>
+            <p>Marca presente, tardanza o falta con un toque, desde el Chrome de tu celular.</p>
+            <button class="btn btn-texto btn-chico" data-aviso="El artículo completo estará en la siguiente versión.">Leer más →</button>
+          </div>
+        </article>
+        <article class="tarjeta-blog">
+          <div class="portada v3"></div>
+          <div class="cuerpo">
+            <span class="fecha">6 de octubre de 2026</span>
+            <h3>Pronto: alerta temprana</h3>
+            <p>El director sabrá a tiempo qué estudiantes necesitan tutoría.</p>
+            <button class="btn btn-texto btn-chico" data-aviso="La alerta temprana llega en la vuelta 02.">Leer más →</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Llamada final ===== -->
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="franja-cta">
+        <h2>Deja la <span>traza</span> de tu recorrido académico, desde la matrícula hasta el egreso.</h2>
+        <a href="app.html#/ingresar" class="btn btn-verde">Iniciar sesión</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <img src="img/logo-horizontal.png" alt="TRAZA">
+      <span>Sistema de Control Educativo con Portafolio Automático · UNA Puno · 2026</span>
+    </div>
+  </footer>
+
+  <!-- ===== Modal de registro ===== -->
+  <div class="modal-fondo oculto" id="modal-registro" role="dialog" aria-modal="true" aria-labelledby="titulo-registro">
+    <div class="modal">
+      <button class="modal-cerrar" data-cerrar aria-label="Cerrar">×</button>
+      <h3 id="titulo-registro">Solicita tu cuenta</h3>
+      <p>Las cuentas las crea la secretaría académica. Déjanos tus datos y te avisamos cuando esté lista.</p>
+      <form class="form" id="form-registro" novalidate>
+        <div class="grupo">
+          <label for="reg-nombre">Nombre completo</label>
+          <input class="campo" id="reg-nombre" required placeholder="Ej. Ana Mamani Quispe">
+        </div>
+        <div class="grupo">
+          <label for="reg-codigo">Código universitario</label>
+          <input class="campo" id="reg-codigo" required inputmode="numeric" maxlength="6" placeholder="6 dígitos">
+        </div>
+        <div class="grupo">
+          <label for="reg-rol">Soy</label>
+          <select class="campo" id="reg-rol">
+            <option>Estudiante</option>
+            <option>Docente</option>
+          </select>
+        </div>
+        <div class="mensaje error oculto" id="reg-error"></div>
+        <button class="btn btn-verde btn-bloque" type="submit">Enviar solicitud</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+
+  <script src="js/modelo.js"></script>
+  <script src="js/inicio.js"></script>
+</body>
+</html>
